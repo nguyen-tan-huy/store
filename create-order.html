@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    .card {
+        display: ;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 16px;
+    }
+
+    .card-content h2 {
+      margin-top: 0;
+    }
+
+    /* Điểm media query cho màn hình nhỏ */
+    @media screen and (max-width: 767px) {
+      .card {
+        width: 100%; /* Chiếm toàn bộ chiều rộng */
+        margin-bottom: 20px; /* Tạo khoảng cách giữa các card */
+      }
+    }
+  </style>
+</head>
+<body> 
+  <div id="data-container">
+    <!-- Dữ liệu sẽ được hiển thị ở đây -->
+  </div>
+
+  <script>
+    // Hàm để gọi API và hiển thị dữ liệu
+    async function fetchData() {
+      try {
+        // Gọi API
+        const response = await fetch('https://api-dev.cbess.vn/product-service/v1/products/DDM24/6481e6a452cd197508f8f385');
+        
+        // Chuyển đổi dữ liệu nhận được sang JSON
+        const data = await response.json();
+        
+        // Hiển thị dữ liệu
+        displayData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    // Hàm để hiển thị dữ liệu trên trang web
+    function displayData(data) {
+      const dataContainer = document.getElementById('data-container');
+
+      // Tạo HTML để hiển thị dữ liệu
+      const html = data.data.data.map(item => `
+      <div class="card">
+        <img src="${item.featured_image}" alt="Hình ảnh bị lỗi">
+        <br/>
+        <div class="card-content">
+          <h2>${item.title}</h2>
+          <p>${item.price === null ? 0 : item.price.amount} đ</p>
+        </div>
+      </div>
+      `).join('');
+
+      // Đưa HTML vào container
+      dataContainer.innerHTML = html;
+    }
+
+    // Gọi hàm fetchData khi trang web được tải
+    window.onload = fetchData;
+  </script>
+
+</body>
+</html>
